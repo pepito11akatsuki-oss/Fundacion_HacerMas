@@ -1,1 +1,58 @@
+@model IEnumerable<FundacionHacerMasWeb.Models.Cita>
+@{ ViewData["Title"] = "Mi Agenda Diaria"; }
 
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <h3 class="fw-light text-dark text-uppercase" style="letter-spacing: 1px;">Mi Agenda de Pacientes</h3>
+            <p class="text-muted small mb-0">Visualización de citas programadas para su consultorio.</p>
+        </div>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-0 text-uppercase fw-bold">Volver al Panel</a>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-0 border-start border-4 border-primary">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light text-secondary text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">
+                    <tr>
+                        <th class="ps-4">Fecha y Hora</th>
+                        <th>Expediente</th>
+                        <th>Nombre del Paciente</th>
+                        <th>Motivo de Consulta</th>
+                        <th>Estado</th>
+                        <th class="text-end pe-4">Acción Médica</th>
+                    </tr>
+                </thead>
+                <tbody class="text-dark small">
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold text-primary">@item.FechaHora.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                                <td class="text-muted fw-bold">P-@item.IdPaciente.ToString("D6")</td>
+                                <td>@item.Paciente?.Usuario?.Nombres @item.Paciente?.Usuario?.Apellidos</td>
+                                <td class="text-truncate" style="max-width: 200px;" title="@item.MotivoConsulta">@item.MotivoConsulta</td>
+                                <td>
+                                    <span class="badge bg-dark rounded-0 fw-normal">@item.Estado</span>
+                                </td>
+                                <td class="text-end pe-4">
+                                    <a asp-action="NotasClinicas" asp-route-id="@item.IdCita" class="btn btn-sm btn-primary rounded-0">Atender / Notas</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">
+                                <h5>Sin pacientes programados</h5>
+                                <p class="mb-0">No tiene citas asignadas en su agenda en este momento.</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
