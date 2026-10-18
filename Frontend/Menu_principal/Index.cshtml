@@ -1,1 +1,128 @@
+@{
+    ViewData["Title"] = "Panel Corporativo";
+}
 
+<div class="container mt-4 mb-5">
+    <div class="mb-5 border-bottom pb-3">
+        <h3 class="fw-light text-dark text-uppercase" style="letter-spacing: 1px;">Panel de Control Operativo</h3>
+        <p class="text-muted small">Seleccione el módulo correspondiente a su perfil de acceso.</p>
+    </div>
+
+    <div class="row g-4">
+
+        @if (User.IsInRole("Administrador"))
+        {
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm border-0 rounded-0 bg-light border-start border-4 border-dark">
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="text-uppercase text-dark fw-bold mb-3">Gestión de Usuarios</h6>
+                        <p class="text-muted small mb-4 flex-grow-1">Administración integral de credenciales, altas y bajas del personal institucional.</p>
+                        <a asp-controller="Usuarios" asp-action="Index" class="btn btn-outline-dark btn-sm w-100 rounded-0 text-uppercase fw-bold">Administrar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm border-0 rounded-0 bg-light border-start border-4 border-secondary">
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="text-uppercase text-secondary fw-bold mb-3">Ingreso y Citas</h6>
+                        <p class="text-muted small mb-4 flex-grow-1">Apertura de expedientes para nuevos pacientes y programación de atención médica.</p>
+                        <a asp-controller="Citas" asp-action="Agendar" class="btn btn-secondary btn-sm w-100 rounded-0 text-uppercase fw-bold">Nuevo Ingreso</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm border-0 rounded-0 bg-light border-start border-4 border-secondary">
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="text-uppercase text-secondary fw-bold mb-3">Búsqueda Clínica</h6>
+                        <p class="text-muted small mb-4 flex-grow-1">Búsqueda y consulta de historial de citas por número de identificación de paciente.</p>
+                        <a asp-controller="Citas" asp-action="BuscarPaciente" class="btn btn-outline-secondary btn-sm w-100 rounded-0 text-uppercase fw-bold">Consultar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card h-100 shadow-sm border-0 rounded-0 bg-light border-start border-4 border-secondary">
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="text-uppercase text-secondary fw-bold mb-3">Agenda General</h6>
+                        <p class="text-muted small mb-4 flex-grow-1">Monitoreo general de la ocupación médica e infraestructura de consultorios.</p>
+                        <a asp-controller="Citas" asp-action="Index" class="btn btn-outline-secondary btn-sm w-100 rounded-0 text-uppercase fw-bold">Visualizar</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (User.IsInRole("Paciente"))
+        {
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm border-0 rounded-0 bg-light border-start border-4 border-info">
+                    <div class="card-body p-4">
+                        <h5 class="text-uppercase text-info fw-bold mb-3">Expediente y Citas</h5>
+                        <p class="text-muted mb-4">
+                            Consulte el estado actual de su cita médica. Visualice la fecha asignada, horario, médico especialista y consultorio.
+                        </p>
+                        <a asp-controller="Citas" asp-action="MisCitas" class="btn btn-outline-info rounded-0 text-uppercase fw-bold">Acceder a mi Información</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (User.IsInRole("Medico"))
+        {
+            <div class="col-md-5">
+                <div class="card h-100 shadow-sm border-0 rounded-0 bg-light border-start border-4 border-dark">
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="text-uppercase text-dark fw-bold mb-3">Agenda Diaria</h6>
+                        <p class="text-muted small flex-grow-1">Visualice sus citas programadas, horarios de atención y el consultorio asignado para la jornada.</p>
+                        <a asp-controller="Citas" asp-action="AgendaDia" class="btn btn-outline-dark btn-sm w-100 rounded-0 text-uppercase fw-bold">Consultar Agenda</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-5">
+                <div class="card h-100 shadow-sm border-0 rounded-0 bg-light border-start border-4 border-secondary">
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="text-uppercase text-secondary fw-bold mb-3">Registro Clínico</h6>
+                        <p class="text-muted small flex-grow-1">Capture el diagnóstico médico, observaciones y prescripciones tras atender a un paciente.</p>
+                        <a asp-controller="Citas" asp-action="NotasClinicas" class="btn btn-outline-secondary btn-sm w-100 rounded-0 text-uppercase fw-bold">Redactar Notas</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (User.IsInRole("Recepcionista"))
+        {
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 rounded-0 bg-light border-start border-4 border-secondary">
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="text-uppercase text-secondary fw-bold mb-3">Agendar Cita</h6>
+                        <p class="text-muted small flex-grow-1">Registre los datos demográficos y asigne un profesional de salud disponible.</p>
+                        <a asp-controller="Citas" asp-action="Agendar" class="btn btn-secondary btn-sm w-100 rounded-0 text-uppercase fw-bold">Nuevo Registro</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 rounded-0 bg-light border-start border-4 border-dark">
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="text-uppercase text-dark fw-bold mb-3">Consultar Citas</h6>
+                        <p class="text-muted small flex-grow-1">Busque en el sistema las citas activas mediante el identificador del paciente.</p>
+                        <a asp-controller="Citas" asp-action="BuscarPaciente" class="btn btn-outline-dark btn-sm w-100 rounded-0 text-uppercase fw-bold">Buscar Paciente</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0 rounded-0 bg-light border-start border-4 border-dark">
+                    <div class="card-body d-flex flex-column">
+                        <h6 class="text-uppercase text-dark fw-bold mb-3">Modificar Agenda</h6>
+                        <p class="text-muted small flex-grow-1">Cancele o posponga citas filtrando por la agenda institucional.</p>
+                        <a asp-controller="Citas" asp-action="Index" class="btn btn-outline-dark btn-sm w-100 rounded-0 text-uppercase fw-bold">Modificar</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
