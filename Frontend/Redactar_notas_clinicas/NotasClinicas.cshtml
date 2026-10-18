@@ -1,1 +1,113 @@
+@model FundacionHacerMasWeb.Models.NotasClinicasViewModel
+@{ ViewData["Title"] = "Expediente Clínico"; }
 
+<div class="container-fluid px-4 mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+        <div>
+            <h3 class="fw-light text-dark text-uppercase" style="letter-spacing: 1px;">Módulo de Atención Médica</h3>
+            <p class="text-muted small mb-0">Llenado de notas de evolución y prescripción médica.</p>
+        </div>
+        <a asp-action="AgendaDia" class="btn btn-outline-secondary btn-sm rounded-0 text-uppercase fw-bold">← Pausar y Volver</a>
+    </div>
+
+    <form asp-action="NotasClinicas" method="post">
+        <input type="hidden" asp-for="IdCita" />
+        <input type="hidden" asp-for="NombrePaciente" />
+
+        <div class="row g-4">
+            <!-- COLUMNA IZQUIERDA: Info y Signos Vitales -->
+            <div class="col-lg-4">
+                
+                <!-- Tarjeta de Identidad -->
+                <div class="card border-0 shadow-sm rounded-0 bg-dark text-white mb-4">
+                    <div class="card-body p-4">
+                        <h6 class="text-uppercase text-secondary small fw-bold mb-1">Paciente en Consulta</h6>
+                        <h4 class="mb-3 text-uppercase">@Model.NombrePaciente</h4>
+                        <div class="d-flex justify-content-between border-top border-secondary pt-3">
+                            <div>
+                                <small class="text-secondary d-block text-uppercase">Expediente</small>
+                                <span class="fw-bold">@Model.IdPacienteExpediente</span>
+                            </div>
+                            <div class="text-end">
+                                <small class="text-secondary d-block text-uppercase">Nacimiento</small>
+                                <span class="fw-bold">@Model.FechaNacimiento</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Triage del paciente -->
+                <div class="card border-0 shadow-sm rounded-0 border-start border-4 border-secondary mb-4">
+                    <div class="card-body p-4">
+                        <h6 class="text-uppercase text-dark fw-bold mb-3">Motivo de Consulta (Triaje)</h6>
+                        <p class="text-muted small fst-italic bg-light p-3 border-start border-2 border-dark">
+                            "@Model.MotivoConsulta"
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Signos Vitales -->
+                <div class="card border-0 shadow-sm rounded-0 border-start border-4 border-info">
+                    <div class="card-body p-4">
+                        <h6 class="text-uppercase text-info fw-bold mb-4">Signos Vitales</h6>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label asp-for="Peso" class="form-label text-muted small text-uppercase">Peso (kg)</label>
+                                <input asp-for="Peso" class="form-control rounded-0 bg-light border-0 text-center" placeholder="Ej. 75.5" />
+                            </div>
+                            <div class="col-6">
+                                <label asp-for="Talla" class="form-label text-muted small text-uppercase">Talla (cm)</label>
+                                <input asp-for="Talla" class="form-control rounded-0 bg-light border-0 text-center" placeholder="Ej. 170" />
+                            </div>
+                            <div class="col-6">
+                                <label asp-for="PresionArterial" class="form-label text-muted small text-uppercase">T.A. (mmHg)</label>
+                                <input asp-for="PresionArterial" class="form-control rounded-0 bg-light border-0 text-center" placeholder="Ej. 120/80" />
+                            </div>
+                            <div class="col-6">
+                                <label asp-for="Temperatura" class="form-label text-muted small text-uppercase">Temp. (°C)</label>
+                                <input asp-for="Temperatura" class="form-control rounded-0 bg-light border-0 text-center" placeholder="Ej. 36.5" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLUMNA DERECHA: SOAP Médica -->
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm rounded-0 h-100">
+                    <div class="card-body p-5">
+                        <h5 class="text-uppercase text-dark fw-bold mb-4 border-bottom pb-2">Evaluación Clínica y Plan</h5>
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                        <!-- Diagnóstico -->
+                        <div class="mb-4">
+                            <label asp-for="Diagnostico" class="form-label text-dark fw-bold small text-uppercase">Diagnóstico Principal (CIE-10)</label>
+                            <textarea asp-for="Diagnostico" class="form-control rounded-0 bg-light border-0 border-start border-2 border-dark" rows="3" placeholder="Redacte el análisis clínico, sintomatología y diagnóstico..." required></textarea>
+                            <span asp-validation-for="Diagnostico" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Receta / Tratamiento -->
+                        <div class="mb-4">
+                            <label asp-for="Tratamiento" class="form-label text-dark fw-bold small text-uppercase">Prescripción y Tratamiento</label>
+                            <textarea asp-for="Tratamiento" class="form-control rounded-0 bg-light border-0 border-start border-2 border-primary" rows="5" placeholder="Medicamento, dosis, frecuencia y duración..." required></textarea>
+                            <span asp-validation-for="Tratamiento" class="text-danger small"></span>
+                        </div>
+
+                        <!-- Observaciones Adicionales -->
+                        <div class="mb-5">
+                            <label asp-for="ObservacionesAdicionales" class="form-label text-muted fw-bold small text-uppercase">Indicaciones Adicionales (Opcional)</label>
+                            <textarea asp-for="ObservacionesAdicionales" class="form-control rounded-0 bg-light border-0" rows="2" placeholder="Estudios de laboratorio requeridos, dieta, reposo..."></textarea>
+                        </div>
+
+                        <!-- Botón de Guardado -->
+                        <div class="d-flex justify-content-end border-top pt-4">
+                            <button type="button" class="btn btn-outline-secondary rounded-0 px-4 me-2 text-uppercase" onclick="window.history.back();">Cancelar</button>
+                            <button type="submit" class="btn btn-dark rounded-0 px-5 text-uppercase fw-bold" style="letter-spacing: 1px;">Firmar y Finalizar Consulta</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
