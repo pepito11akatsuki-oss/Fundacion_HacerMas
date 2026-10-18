@@ -1,1 +1,111 @@
+@model FundacionHacerMasWeb.Models.UsuarioViewModel
+@{
+    ViewData["Title"] = "Dar de Alta Usuario";
+}
 
+<div class="container mt-4 mb-5">
+    <div class="mb-4">
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm rounded-0 text-uppercase fw-bold">← Regresar al Directorio</a>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-0 border-top border-4 border-dark" style="max-width: 700px; margin: 0 auto;">
+        <div class="card-body p-5">
+            <h5 class="text-uppercase text-dark mb-4 fw-bold" style="letter-spacing: 1px;">Alta de Nuevo Personal</h5>
+
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                <div class="mb-4">
+                    <label asp-for="IdRol" class="form-label text-muted small text-uppercase">Perfil Operativo en el Sistema</label>
+                    <select asp-for="IdRol" class="form-select rounded-0 bg-light border-0" asp-items="ViewBag.IdRol" id="rolSelector" required>
+                        <option value="">-- Seleccione un Perfil --</option>
+                    </select>
+                </div>
+
+                <div class="row mb-3 g-3">
+                    <div class="col-md-6">
+                        <label asp-for="Nombres" class="form-label text-muted small text-uppercase">Nombre(s)</label>
+                        <input asp-for="Nombres" class="form-control rounded-0 bg-light border-0" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Apellidos" class="form-label text-muted small text-uppercase">Apellidos</label>
+                        <input asp-for="Apellidos" class="form-control rounded-0 bg-light border-0" required />
+                    </div>
+                </div>
+
+                <div class="row mb-4 g-3">
+                    <div class="col-md-6">
+                        <label asp-for="Correo" class="form-label text-muted small text-uppercase">Correo Institucional / Referencia</label>
+                        <!-- type="text" evita el error del arroba -->
+                        <input asp-for="Correo" class="form-control rounded-0 bg-light border-0" type="text" placeholder="Ej. correo@hacermas.org o S/N" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="PasswordHash" class="form-label text-muted small text-uppercase">Contraseña Temporal</label>
+                        <div class="input-group">
+                            <input asp-for="PasswordHash" id="createPassword" class="form-control rounded-0 bg-light border-0" type="password" required />
+                            <button class="btn btn-light rounded-0 border-0 text-muted" type="button" onclick="togglePassword('createPassword', 'eyeIconCreate')">
+                                <span id="eyeIconCreate">👁️</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bloque Clínico (Oculto por defecto) -->
+                <div id="bloqueMedico" class="bg-light p-4 mb-4 border-start border-3 border-secondary" style="display: none;">
+                    <h6 class="text-uppercase text-secondary small fw-bold mb-3">Asignación Clínica (Exclusivo Médico)</h6>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label asp-for="Consultorio" class="form-label text-muted small text-uppercase">Consultorio Asignado</label>
+                            <input asp-for="Consultorio" class="form-control rounded-0 border-0" placeholder="Ej. Consultorio 102" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="HoraEntrada" class="form-label text-muted small text-uppercase">Horario de Entrada</label>
+                            <input asp-for="HoraEntrada" type="time" class="form-control rounded-0 border-0" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="HoraSalida" class="form-label text-muted small text-uppercase">Horario de Salida</label>
+                            <input asp-for="HoraSalida" type="time" class="form-control rounded-0 border-0" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4">
+                    <button type="submit" class="btn btn-dark rounded-0 px-5 py-2 text-uppercase fw-bold" style="letter-spacing: 1px;">Registrar y Generar ID</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Mostrar/Ocultar contraseña
+    function togglePassword(inputId, iconId) {
+        var input = document.getElementById(inputId);
+        var icon = document.getElementById(iconId);
+        if (input.type === "password") {
+            input.type = "text";
+            icon.innerText = "🙈";
+        } else {
+            input.type = "password";
+            icon.innerText = "👁️";
+        }
+    }
+
+    // Desplegar campos de médico
+    document.addEventListener("DOMContentLoaded", function() {
+        var rolSelector = document.getElementById("rolSelector");
+        var bloqueMedico = document.getElementById("bloqueMedico");
+
+        function verificarRol() {
+            var rolSeleccionado = rolSelector.options[rolSelector.selectedIndex].text.toLowerCase();
+            if (rolSeleccionado.includes("medico") || rolSeleccionado.includes("médico")) {
+                bloqueMedico.style.display = "block";
+            } else {
+                bloqueMedico.style.display = "none";
+            }
+        }
+
+        rolSelector.addEventListener("change", verificarRol);
+        verificarRol();
+    });
+</script>
